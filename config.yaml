@@ -122,3 +122,77 @@ models:
     mode: test
     task_set: sts
     prompt_method: cot
+
+  # ===== Retrieval Configurations =====
+
+  llama-2-7b-retrieval:
+    model_name_or_path: "/tos-bjml-ai4chem/fuyuchen/llm_weights/Llama-2-7b-hf"
+    use_which_plan: vanilla
+    output_layer: -1
+    tp_starting_index: 0
+    tp_exiting_index: 0
+    batch_size: 8
+    prompt_method: prompteol
+    encode_max_length: 512
+    output_dir: "./retrieval_results"
+    task_list:
+      - LEMBSummScreenFDRetrieval
+      - LEMBQMSumRetrieval
+      - LEMBWikimQARetrieval
+      - LEMBNarrativeQARetrieval
+      - LEMBNeedleRetrieval
+      - LEMBPasskeyRetrieval
+
+  llama-2-7b-tp-retrieval:
+    model_name_or_path: "/tos-bjml-ai4chem/fuyuchen/llm_weights/Llama-2-7b-hf"
+    use_which_plan: tp
+    output_layer: 27
+    tp_starting_index: 1
+    tp_exiting_index: 7
+    batch_size: 8
+    prompt_method: prompteol
+    encode_max_length: 512
+    output_dir: "./retrieval_results"
+    task_list:
+      - LEMBSummScreenFDRetrieval
+      - LEMBQMSumRetrieval
+      - LEMBWikimQARetrieval
+      - LEMBNarrativeQARetrieval
+      - LEMBNeedleRetrieval
+      - LEMBPasskeyRetrieval
+
+  qwen2-7b-retrieval:
+    model_name_or_path: "/path/to/qwen2-7b"
+    use_which_plan: vanilla
+    output_layer: -1
+    tp_starting_index: 0
+    tp_exiting_index: 0
+    batch_size: 8
+    prompt_method: cot
+    encode_max_length: 512
+    output_dir: "./retrieval_results"
+    task_list:
+      - LEMBSummScreenFDRetrieval
+      - LEMBQMSumRetrieval
+      - LEMBWikimQARetrieval
+      - LEMBNarrativeQARetrieval
+      - LEMBNeedleRetrieval
+      - LEMBPasskeyRetrieval
+
+  qwen2-7b-tp-retrieval:
+    model_name_or_path: "/path/to/qwen2-7b"
+    use_which_plan: tp
+    output_layer: -2
+    tp_starting_index: 1
+    tp_exiting_index: 6
+    batch_size: 8
+    prompt_method: cot
+    encode_max_length: 512
+    output_dir: "./retrieval_results"
+    task_list:
+      - LEMBSummScreenFDRetrieval
+      - LEMBQMSumRetrieval
+      - LEMBWikimQARetrieval
+      - LEMBNarrativeQARetrieval
+      - LEMBNeedleRetrieval
+      - LEMBPasskeyRetrieval
