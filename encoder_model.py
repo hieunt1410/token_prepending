@@ -99,9 +99,9 @@ class TokenPrependingRetrievalModel:
 
         if self.prompt_method == "prompteol":
             if self.use_tp:
-                return f'This sentence : <PST> "{text}" means in one word:"'
+                return f'Given a legal case, retrieve documents that are most similar to the case <PST> "{text}"'
             else:
-                return f'This sentence : "{text}" means in one word:"'
+                return f'Given a legal case, retrieve documents that are most similar to the case "{text}"'
         elif self.prompt_method == "cot":
             if self.use_tp:
                 return f'After thinking step by step , this sentence : <PST> "{text}" means in one word:"'

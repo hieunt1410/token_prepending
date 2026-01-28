@@ -412,7 +412,7 @@ class Qwen2Model(Qwen2PreTrainedModel):
 
         for index, decoder_layer in enumerate(self.layers):
             if output_hidden_states:
-                all_hidden_states += (hidden_states,)
+                all_hidden_states += (hidden_states,) # B x seq_len x hidden_size
 
             if self.gradient_checkpointing and self.training:
                 layer_outputs = self._gradient_checkpointing_func(
@@ -454,10 +454,10 @@ class Qwen2Model(Qwen2PreTrainedModel):
                         )
                     elif index >= layer_index and index < exiting_index:
                         B = hidden_states.shape[0]
-                        previous_sentence_embeddings = hidden_states[:, -1, :].clone()
+                        previous_sentence_embeddings = hidden_states[:, -1, :].clone() # B x hidden_size
                         hidden_states[torch.arange(B), pst_token_indices, :] = (
                             previous_sentence_embeddings
-                        )
+                        ) # B x seq_len x hidden_size
                         layer_outputs = decoder_layer(
                             hidden_states,
                             attention_mask=causal_mask,
@@ -467,7 +467,7 @@ class Qwen2Model(Qwen2PreTrainedModel):
                             use_cache=use_cache,
                             cache_position=cache_position,
                             position_embeddings=position_embeddings,
-                        )
+                        ) # B x seq_len x hidden_size
                     elif index >= exiting_index:
                         layer_outputs = decoder_layer(
                             hidden_states,
@@ -478,7 +478,7 @@ class Qwen2Model(Qwen2PreTrainedModel):
                             use_cache=use_cache,
                             cache_position=cache_position,
                             position_embeddings=position_embeddings,
-                        )
+                        ) # B x seq_len x hidden_size
                     else:
                         raise ValueError("layer index not right!")
 
@@ -495,7 +495,9 @@ class Qwen2Model(Qwen2PreTrainedModel):
             if output_attentions:
                 all_self_attns += (layer_outputs[1],)
 
-        hidden_states = self.norm(hidden_states)
+        # hidden_states = self.norm(hidden_states)
+        output = torch.stack(all_hidden_states + hidden_states, dim=0)
+        hidden_states = torch.mean(output, dim=0)
 
         # add hidden states from the last decoder layer
         if output_hidden_states:
