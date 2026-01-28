@@ -131,7 +131,7 @@ models:
     output_layer: -1
     tp_starting_index: 0
     tp_exiting_index: 0
-    batch_size: 8
+    batch_size: 1
     prompt_method: prompteol
     encode_max_length: 32768
     output_dir: "./retrieval_results"
@@ -150,7 +150,7 @@ models:
     output_layer: 27
     tp_starting_index: 1
     tp_exiting_index: 7
-    batch_size: 8
+    batch_size: 1
     prompt_method: prompteol
     encode_max_length: 32768
     output_dir: "./retrieval_results"
