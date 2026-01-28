@@ -18,6 +18,7 @@ from retrieval_tasks.LEMBNarrativeQARetrieval import LEMBNarrativeQARetrieval
 from retrieval_tasks.LEMBQMSumRetrieval import LEMBQMSumRetrieval
 from retrieval_tasks.LEMBSummScreenFDRetrieval import LEMBSummScreenFDRetrieval
 from retrieval_tasks.LEMBWikimQARetrieval import LEMBWikimQARetrieval
+from retrieval_tasks.coliee_task1 import ColieeTask1
 
 CUSTOM_TASKS = {
     "LEMBNeedleRetrieval": LEMBNeedleRetrieval,
@@ -26,6 +27,7 @@ CUSTOM_TASKS = {
     "LEMBQMSumRetrieval": LEMBQMSumRetrieval,
     "LEMBSummScreenFDRetrieval": LEMBSummScreenFDRetrieval,
     "LEMBWikimQARetrieval": LEMBWikimQARetrieval,
+    "coliee_task1": ColieeTask1,
 }
 
 logging.basicConfig(format="%(asctime)s : %(message)s", level=logging.INFO)
@@ -85,6 +87,7 @@ def main():
             "LEMBNarrativeQARetrieval",
             "LEMBNeedleRetrieval",
             "LEMBPasskeyRetrieval",
+            "coliee_task1",
         ],
     )
 
@@ -152,6 +155,7 @@ def main():
         "LEMBQMSumRetrieval",
         "LEMBWikimQARetrieval",
         "LEMBNarrativeQARetrieval",
+        "coliee_task1",
     ]:
         if task in args.task_list:
             retrieval_task_list.append(task)
