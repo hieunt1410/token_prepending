@@ -142,6 +142,7 @@ models:
       - LEMBNarrativeQARetrieval
       - LEMBNeedleRetrieval
       - LEMBPasskeyRetrieval
+      - coliee_task1
 
   llama-2-7b-tp-retrieval:
     model_name_or_path: "/tos-bjml-ai4chem/fuyuchen/llm_weights/Llama-2-7b-hf"
@@ -160,6 +161,7 @@ models:
       - LEMBNarrativeQARetrieval
       - LEMBNeedleRetrieval
       - LEMBPasskeyRetrieval
+      - coliee_task1
 
   qwen2-7b-retrieval:
     model_name_or_path: "/path/to/qwen2-7b"
@@ -178,6 +180,7 @@ models:
       - LEMBNarrativeQARetrieval
       - LEMBNeedleRetrieval
       - LEMBPasskeyRetrieval
+      - coliee_task1
 
   qwen2-7b-tp-retrieval:
     model_name_or_path: "/path/to/qwen2-7b"
@@ -196,3 +199,4 @@ models:
       - LEMBNarrativeQARetrieval
       - LEMBNeedleRetrieval
       - LEMBPasskeyRetrieval
+      - coliee_task1
