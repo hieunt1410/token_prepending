@@ -185,9 +185,9 @@ models:
   qwen2-7b-tp-retrieval:
     model_name_or_path: "Qwen/Qwen2-7B-Instruct"
     use_which_plan: tp
-    output_layer: -2
+    output_layer: -1
     tp_starting_index: 1
-    tp_exiting_index: 6
+    tp_exiting_index: 7
     batch_size: 1
     prompt_method: prompteol
     encode_max_length: 32768
