@@ -80,7 +80,7 @@ models:
     prompt_method: cot
 
   qwen2-7b:
-    model_name_or_path: "/path/to/qwen2-7b"
+    model_name_or_path: "Qwen/Qwen2-7B"
     use_which_plan: vanilla
     output_layer: -1
     tp_starting_index: 0  
@@ -91,7 +91,7 @@ models:
     prompt_method: cot
 
   qwen2-7b-tp:
-    model_name_or_path: "/path/to/qwen2-7b"
+    model_name_or_path: "Qwen/Qwen2-7B"
     use_which_plan: tp
     output_layer: -2
     tp_starting_index: 1
