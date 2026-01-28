@@ -496,7 +496,7 @@ class Qwen2Model(Qwen2PreTrainedModel):
                 all_self_attns += (layer_outputs[1],)
 
         # hidden_states = self.norm(hidden_states)
-        output = torch.stack(all_hidden_states + hidden_states, dim=0)
+        output = torch.stack(all_hidden_states + (hidden_states,), dim=0)
         hidden_states = torch.mean(output, dim=0)
 
         # add hidden states from the last decoder layer
