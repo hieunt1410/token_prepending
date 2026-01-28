@@ -376,7 +376,6 @@ class Qwen2Model(Qwen2PreTrainedModel):
 
         if self.plan == "tp":
             pst_token_indices = find_token_indices(input_ids, token=151646)
-            first_token_indices = find_token_indices(input_ids, token=6025)
 
         if inputs_embeds is None:
             inputs_embeds = self.embed_tokens(input_ids)
