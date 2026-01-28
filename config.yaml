@@ -133,7 +133,7 @@ models:
     tp_exiting_index: 0
     batch_size: 8
     prompt_method: prompteol
-    encode_max_length: 512
+    encode_max_length: 32768
     output_dir: "./retrieval_results"
     task_list:
       - LEMBSummScreenFDRetrieval
@@ -152,7 +152,7 @@ models:
     tp_exiting_index: 7
     batch_size: 8
     prompt_method: prompteol
-    encode_max_length: 512
+    encode_max_length: 32768
     output_dir: "./retrieval_results"
     task_list:
       - LEMBSummScreenFDRetrieval
@@ -189,7 +189,7 @@ models:
     tp_starting_index: 1
     tp_exiting_index: 6
     batch_size: 8
-    prompt_method: cot
+    prompt_method: prompteol
     encode_max_length: 512
     output_dir: "./retrieval_results"
     task_list:
