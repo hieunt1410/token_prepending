@@ -557,8 +557,10 @@ class LlamaModel(LlamaPreTrainedModel):
                         )
                     elif index >= layer_index and index < exiting_index:
                         B = hidden_states.shape[0]
-                        previous_sentence_embeddings = hidden_states[:, -1, :].clone()
-                        hidden_states[torch.arange(B), pst_token_indices, :] = previous_sentence_embeddings
+                        # Mean pooling over non-padding tokens
+                        mask = attention_mask.unsqueeze(-1).float()  # (B, seq_len, 1)
+                        mean_embeddings = (hidden_states * mask).sum(dim=1) / mask.sum(dim=1)  # (B, dim)
+                        hidden_states[torch.arange(B), pst_token_indices, :] = mean_embeddings
 
                         layer_outputs = decoder_layer(
                             hidden_states,
