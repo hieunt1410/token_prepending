@@ -412,7 +412,7 @@ class Qwen2Model(Qwen2PreTrainedModel):
 
         for index, decoder_layer in enumerate(self.layers):
             if output_hidden_states:
-                all_hidden_states += (hidden_states,) # B x seq_len x hidden_size
+                all_hidden_states += (hidden_states,) # num_layers x batch_size x seq_len x hidden_size
 
             if self.gradient_checkpointing and self.training:
                 layer_outputs = self._gradient_checkpointing_func(
@@ -496,9 +496,7 @@ class Qwen2Model(Qwen2PreTrainedModel):
                 all_self_attns += (layer_outputs[1],)
 
         # hidden_states = self.norm(hidden_states)
-        output = torch.stack(all_hidden_states + (hidden_states,), dim=0)
-        hidden_states = torch.mean(output, dim=0)
-        hidden_states = self.norm(hidden_states)
+        hidden_states = self.norm(torch.stack(all_hidden_states + (hidden_states,), dim=0).mean(dim=0))
 
         # add hidden states from the last decoder layer
         if output_hidden_states:
