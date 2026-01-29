@@ -126,7 +126,7 @@ models:
   # ===== Retrieval Configurations =====
 
   llama-2-7b-retrieval:
-    model_name_or_path: "/tos-bjml-ai4chem/fuyuchen/llm_weights/Llama-2-7b-hf"
+    model_name_or_path: "meta-llama/Llama-2-7b-hf"
     use_which_plan: vanilla
     output_layer: -1
     tp_starting_index: 0
@@ -145,7 +145,7 @@ models:
       - coliee_task1
 
   llama-2-7b-tp-retrieval:
-    model_name_or_path: "/tos-bjml-ai4chem/fuyuchen/llm_weights/Llama-2-7b-hf"
+    model_name_or_path: "meta-llama/Llama-2-7b-hf"
     use_which_plan: tp
     output_layer: 27
     tp_starting_index: 1
