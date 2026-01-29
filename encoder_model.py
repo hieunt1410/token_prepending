@@ -1,10 +1,9 @@
-import os
 import torch
 import torch.nn.functional as F
 import numpy as np
 import logging
 
-from typing import TYPE_CHECKING, Dict, List, Tuple
+from typing import TYPE_CHECKING, Dict, List
 from tqdm import tqdm
 from transformers import AutoTokenizer
 from mteb.models.model_meta import ModelMeta
