@@ -140,12 +140,15 @@ class TokenPrependingRetrievalModel:
                 if batch[k] is not None:
                     batch[k] = batch[k].to(self.device)
 
+            attention_mask = batch["attention_mask"]
             outputs = self.model(
                 output_hidden_states=True, return_dict=True, **batch
             )
             hidden_states = outputs.hidden_states
-            # Extract last token embedding from the specified layer
-            embeds = hidden_states[self.output_layer][:, -1, :]
+            # Mean pooling over non-padding tokens
+            token_embeds = hidden_states[self.output_layer]  # (B, seq_len, dim)
+            mask = attention_mask.unsqueeze(-1).float()  # (B, seq_len, 1)
+            embeds = (token_embeds * mask).sum(dim=1) / mask.sum(dim=1)
 
             if embeds.dtype == torch.bfloat16:
                 embeds = embeds.float()

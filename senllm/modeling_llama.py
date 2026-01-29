@@ -602,7 +602,7 @@ class LlamaModel(LlamaPreTrainedModel):
                 all_self_attns += (layer_outputs[1],)
 
 
-        hidden_states = self.norm(torch.stack(all_hidden_states + (hidden_states,), dim=0).mean(dim=0))
+        hidden_states = self.norm(hidden_states)
 
         # add hidden states from the last decoder layer
         if output_hidden_states:
