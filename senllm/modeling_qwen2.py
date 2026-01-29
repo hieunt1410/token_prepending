@@ -376,6 +376,7 @@ class Qwen2Model(Qwen2PreTrainedModel):
 
         if self.plan == "tp":
             pst_token_indices = find_token_indices(input_ids, token=151646)
+            first_token_indices = find_token_indices(input_ids, token=6025)
 
         if inputs_embeds is None:
             inputs_embeds = self.embed_tokens(input_ids)
@@ -451,7 +452,7 @@ class Qwen2Model(Qwen2PreTrainedModel):
                             use_cache=use_cache,
                             cache_position=cache_position,
                             position_embeddings=position_embeddings,
-                        )
+                        ) # B x seq_len x hidden_size
                     elif index >= layer_index and index < exiting_index:
                         B = hidden_states.shape[0]
                         previous_sentence_embeddings = hidden_states[:, -1, :].clone() # B x hidden_size

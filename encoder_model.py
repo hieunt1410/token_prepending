@@ -1,5 +1,4 @@
 import torch
-import torch.nn.functional as F
 import numpy as np
 import logging
 
@@ -98,9 +97,9 @@ class TokenPrependingRetrievalModel:
 
         if self.prompt_method == "prompteol":
             if self.use_tp:
-                return f'Given a legal case, retrieve documents that are most similar to the case <PST>: "{text}"'
+                return f'Represent this sentence <PST> "{text}" for searching relevant passages:'
             else:
-                return f'Given a legal case, retrieve documents that are most similar to the case: "{text}"'
+                return f'Represent this sentence "{text}" for searching relevant passages:'
         elif self.prompt_method == "cot":
             if self.use_tp:
                 return f'After thinking step by step , this sentence : <PST> "{text}" means in one word:"'
@@ -139,7 +138,6 @@ class TokenPrependingRetrievalModel:
             hidden_states = outputs.hidden_states
             # Extract last token embedding from the specified layer
             embeds = hidden_states[self.output_layer][:, -1, :]
-            embeds = F.normalize(embeds, p=2, dim=-1)
 
             if embeds.dtype == torch.bfloat16:
                 embeds = embeds.float()
@@ -163,8 +161,9 @@ class TokenPrependingRetrievalModel:
             "{} {}".format(doc.get("title", ""), doc["text"]).strip()
             for doc in corpus
         ]
-        prompted = [self._build_prompt(t) for t in texts]
-        return self._do_encode(prompted, batch_size)
+        input_texts = ["passage: {}".format(text) for text in texts]
+
+        return self._do_encode(input_texts, batch_size)
 
     def encode(
         self,
