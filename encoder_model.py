@@ -85,6 +85,22 @@ class TokenPrependingRetrievalModel:
         self.prompt_method = args.prompt_method
         self.use_tp = args.use_which_plan == "tp"
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+        self.current_task_name = None
+
+        # Task-specific retrieval instructions
+        self.task_instructions = {
+            "LEMBNarrativeQARetrieval": "Given a question about a narrative, retrieve the relevant document",
+            "LEMBNeedleRetrieval": "Retrieve the relevant document",
+            "LEMBPasskeyRetrieval": "Retrieve the relevant document",
+            "LEMBQMSumRetrieval": "Given a query about a meeting, retrieve the relevant meeting transcript",
+            "LEMBSummScreenFDRetrieval": "Given a summary, retrieve the relevant screenplay transcript",
+            "LEMBWikimQARetrieval": "Given a multi-hop question, retrieve the relevant Wikipedia document",
+            "coliee_task1": "Given a legal case, retrieve relevant legal cases",
+        }
+
+    def set_task(self, task_name: str):
+        """Set the current task for task-specific prompting."""
+        self.current_task_name = task_name
 
     def _build_prompt(self, text: str) -> str:
         """Build the prompt-wrapped text for embedding extraction."""
@@ -95,23 +111,15 @@ class TokenPrependingRetrievalModel:
         if len(text) > 0 and text[-1] == "?":
             text = text[:-1] + "."
 
-        if self.prompt_method == "prompteol":
-            if self.use_tp:
-                return f'Represent this sentence <PST> "{text}" for searching relevant passages:'
-            else:
-                return f'Represent this sentence "{text}" for searching relevant passages:'
-        elif self.prompt_method == "cot":
-            if self.use_tp:
-                return f'After thinking step by step , this sentence : <PST> "{text}" means in one word:"'
-            else:
-                return f'After thinking step by step , this sentence : "{text}" means in one word:"'
-        elif self.prompt_method == "ke":
-            if self.use_tp:
-                return f'The essence of a sentence is often captured by its main subjects and actions, while descriptive terms provide additional but less central details. With this in mind , this sentence : <PST> "{text}" means in one word:"'
-            else:
-                return f'The essence of a sentence is often captured by its main subjects and actions, while descriptive terms provide additional but less central details. With this in mind , this sentence : "{text}" means in one word:"'
+        # Get task-specific instruction
+        instruction = self.task_instructions.get(
+            self.current_task_name, "Retrieve the relevant document"
+        )
+
+        if self.use_tp:
+            return f'{instruction}. <PST> "{text}"'
         else:
-            raise ValueError(f"Unknown prompt_method: {self.prompt_method}")
+            return f'{instruction}. "{text}"'
 
     @torch.no_grad()
     def _do_encode(self, texts: List[str], batch_size: int) -> np.ndarray:
@@ -161,9 +169,8 @@ class TokenPrependingRetrievalModel:
             "{} {}".format(doc.get("title", ""), doc["text"]).strip()
             for doc in corpus
         ]
-        input_texts = ["Represent this passage <PST> {}: ".format(text) for text in texts]
-
-        return self._do_encode(input_texts, batch_size)
+        prompted = [self._build_prompt(t) for t in texts]
+        return self._do_encode(prompted, batch_size)
 
     def encode(
         self,

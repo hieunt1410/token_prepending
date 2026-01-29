@@ -164,16 +164,14 @@ def main():
         if task in args.task_list:
             needle_passkey_task_list.append(task)
 
-    # Evaluate needle/passkey tasks
-    if needle_passkey_task_list:
+    # Evaluate needle/passkey tasks (one at a time for task-specific prompting)
+    for name in needle_passkey_task_list:
         context_length = args.encode_max_length
-        tasks = [
-            CUSTOM_TASKS[name](context_length=context_length)
-            for name in needle_passkey_task_list
-        ]
+        task = CUSTOM_TASKS[name](context_length=context_length)
+        model.set_task(name)
         results = mteb.evaluate(
             model,
-            tasks,
+            [task],
             prediction_folder=mteb_output_dir,
             overwrite_strategy="only-missing",
             encode_kwargs={"batch_size": args.batch_size},
@@ -187,12 +185,13 @@ def main():
                     "ndcg@10": scores.get("ndcg_at_10"),
                 }
 
-    # Evaluate retrieval tasks
-    if retrieval_task_list:
-        tasks = [CUSTOM_TASKS[name]() for name in retrieval_task_list]
+    # Evaluate retrieval tasks (one at a time for task-specific prompting)
+    for name in retrieval_task_list:
+        task = CUSTOM_TASKS[name]()
+        model.set_task(name)
         results = mteb.evaluate(
             model,
-            tasks,
+            [task],
             prediction_folder=mteb_output_dir,
             overwrite_strategy="only-missing",
             encode_kwargs={"batch_size": args.batch_size},
