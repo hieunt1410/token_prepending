@@ -161,7 +161,7 @@ class TokenPrependingRetrievalModel:
             "{} {}".format(doc.get("title", ""), doc["text"]).strip()
             for doc in corpus
         ]
-        input_texts = ["passage: {}".format(text) for text in texts]
+        input_texts = ["Represent this passage <PST> {}: ".format(text) for text in texts]
 
         return self._do_encode(input_texts, batch_size)
 
